@@ -9,7 +9,6 @@ SkillTrack is a Task-Based Skill Intelligence Monitoring and Tracking System tha
 * Frontend: React, Vite, Tailwind CSS
 * Backend: Flask (Python)
 * Database: MongoDB (PyMongo)
-* AI Integration: Groq API
 
 ## Main Features
 
@@ -19,7 +18,6 @@ SkillTrack is a Task-Based Skill Intelligence Monitoring and Tracking System tha
 * XP and Level System
 * Leaderboard
 * Notifications
-* AI-Generated Tasks
 * Skill Decay Monitoring
 
 ## MongoDB Collections
@@ -88,7 +86,6 @@ Students earn XP by:
 * Student Management
 * Course Management
 * Task Management
-* AI Task Generation
 * Decay Monitoring
 
 ## License
