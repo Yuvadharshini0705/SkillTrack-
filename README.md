@@ -1,256 +1,96 @@
-# SkillTrack — MongoDB Edition
-### Task-Based Skill Intelligence Monitoring & Tracking System
+# SkillTrack – MongoDB Edition
 
-Full-stack AI-powered learning platform with **MongoDB** as the database.
+## Overview
 
----
+SkillTrack is a Task-Based Skill Intelligence Monitoring and Tracking System that helps students improve their technical skills through daily tasks, performance tracking, XP rewards, and skill analytics.
 
-## 🗄️ Database: MongoDB (Compass Compatible)
+## Technologies Used
 
-This version uses **PyMongo** — no ORM, direct MongoDB queries.
+* Frontend: React, Vite, Tailwind CSS
+* Backend: Flask (Python)
+* Database: MongoDB (PyMongo)
+* AI Integration: Groq API
 
-### MongoDB Collections
+## Main Features
 
-| Collection | Description |
-|-----------|-------------|          
-| `users` | Students & admins with **embedded profile + courses** |
-| `courses` | 7 IT training courses |
-| `tasks` | MCQ / Debug / Coding / Theory tasks |
-| `task_assignments` | Daily task assignments per student |
-| `performances` | Student answers, scores, XP |
-| `notifications` | System alerts & messages |
-| `skill_decay_logs` | Skill decay history |
+* Student and Admin Login
+* Daily Task Assignment
+* Skill Tracking and Analytics
+* XP and Level System
+* Leaderboard
+* Notifications
+* AI-Generated Tasks
+* Skill Decay Monitoring
 
-### Document Structure (users collection)
-```json
-{
-  "_id": "ObjectId",
-  "email": "student@example.com",
-  "password_hash": "...",
-  "role": "student",
-  "is_active": true,
-  "created_at": "ISODate",
-  "profile": {
-    "full_name": "John Doe",
-    "gender": "male",
-    "phone": "9876543210",
-    "education": "undergraduate",
-    "total_xp": 350,
-    "level": 4,
-    "current_streak": 5,
-    "longest_streak": 12,
-    "profile_completed": true,
-    "courses": [
-      {
-        "course_id": "ObjectId string",
-        "course_name": "Full Stack Development (MERN)",
-        "enrolled_at": "ISODate",
-        "current_day": 8,
-        "skill_score": 82.5,
-        "last_activity": "ISODate",
-        "status": "active"
-      }
-    ]
-  }
-}
-```
+## MongoDB Collections
 
----
+* users
+* courses
+* tasks
+* task_assignments
+* performances
+* notifications
+* skill_decay_logs
 
-## 🚀 Quick Start
+## Installation
 
-### Prerequisites
-- Python 3.10+
-- Node.js 18+
-- **MongoDB running locally** (`mongod` on port 27017)
-- MongoDB Compass (optional, for GUI)
+### Backend
 
-### 1. Start MongoDB
 ```bash
-# Windows
-net start MongoDB
-
-# Mac (Homebrew)
-brew services start mongodb-community
-
-# Linux
-sudo systemctl start mongod
-```
-
-### 2. Backend Setup
-```bash
-cd skilltrack/backend
-
-python -m venv venv
-source venv/bin/activate       # Windows: venv\Scripts\activate
-
+cd backend
 pip install -r requirements.txt
-
-cp .env.example .env
-# Edit .env — add your GROQ_API_KEY (get free at console.groq.com)
-
 python app.py
 ```
 
-Backend starts at: **http://localhost:5000**
-Database auto-created: **skilltrack** (visible in Compass)
+### Frontend
 
-### 3. Frontend Setup
 ```bash
-cd skilltrack/frontend
-
+cd frontend
 npm install
 npm run dev
 ```
 
-Frontend starts at: **http://localhost:5173**
+### MongoDB
 
----
+Make sure MongoDB is running on port 27017.
 
-## 🔑 Default Login
+## Skill Decay
 
-| Role | Email | Password |
-|------|-------|----------|
-| **Admin** | admin@skilltrack.com | admin@123 |
-| Student | Register via /register | any 6+ chars |
+Students lose skill points when they are inactive or consistently perform poorly. Easier tasks are assigned when skill scores become low.
 
----
+## XP System
 
-## 🧭 MongoDB Compass — What to Expect
+Students earn XP by:
 
-After first run, open Compass and connect to `mongodb://localhost:27017`.
-You'll see the **skilltrack** database with these populated collections:
+* Completing tasks
+* Answering correctly
+* Maintaining streaks
+* Finishing tasks quickly
 
-```
-skilltrack
-├── courses          (7 documents — all IT courses)
-├── tasks            (6 sample tasks + any AI/manual you add)
-├── users            (1 admin + any students you register)
-├── task_assignments (created when students log in)
-├── performances     (created when students submit answers)
-├── notifications    (created on register/login events)
-└── skill_decay_logs (created when skill decay is detected)
-```
+## API Modules
 
----
+### Authentication
 
-## 🧠 Skill Decay Rules
-
-| Rule | Trigger | Points Lost |
-|------|---------|-------------|
-| Inactivity 1 day | No login 1 day | −2 |
-| Inactivity 2 days | No login 2 days | −5 |
-| Inactivity 3 days | No login 3 days | −10 |
-| Inactivity 1 week | No login 7 days | −20 |
-| 3 consecutive fails | 3 wrong in a row | −3× count |
-| Low weekly avg | Avg score < 60% | −(gap÷10) |
-
-**Recovery**: Skill score < 40 → simpler tasks auto-assigned
-
----
-
-## 📊 XP & Level System
-
-| Action | XP |
-|--------|----|
-| Correct answer | Task reward (10–50) |
-| Speed bonus (< 50% time used) | +5 |
-| No hints used | +3 |
-| Daily streak bonus | +5 × streak (max 10) |
-| Wrong answer | +2 (participation) |
-
-**Levels**: 1→100XP→2→250XP→3→500XP→4→900XP→5...
-
----
-
-## 🔗 API Reference
-
-### Auth
-```
-POST /api/auth/register    { email, password }
-POST /api/auth/login       { email, password }
-GET  /api/auth/me
-```
+* Register
+* Login
+* User Profile
 
 ### Student
-```
-GET  /api/student/dashboard
-POST /api/student/profile/setup   { full_name, gender, phone, education, course_ids[] }
-GET  /api/student/tasks/today     ?course_id=<id>
-POST /api/student/tasks/submit    { assignment_id, answer, time_taken, hints_used }
-GET  /api/student/analytics/<course_id>
-GET  /api/student/leaderboard
-GET  /api/student/notifications
-POST /api/student/notifications/read
-```
+
+* Dashboard
+* Tasks
+* Analytics
+* Leaderboard
+* Notifications
 
 ### Admin
-```
-GET  /api/admin/dashboard
-GET  /api/admin/students           ?search=&page=
-POST /api/admin/students/<id>/toggle
-GET  /api/admin/tasks              ?status=&source=&course_id=
-POST /api/admin/tasks/create
-POST /api/admin/tasks/<id>/review  { action: "approve"|"reject" }
-POST /api/admin/tasks/generate-ai  { course_slug, day, count }
-GET  /api/admin/courses
-POST /api/admin/courses
-GET  /api/admin/decay-logs
-```
 
----
+* Student Management
+* Course Management
+* Task Management
+* AI Task Generation
+* Decay Monitoring
 
-## 🗂️ File Structure
+## License
 
-```
-skilltrack/
-├── backend/
-│   ├── app.py                  Flask app factory
-│   ├── db.py                   PyMongo connection + indexes
-│   ├── models.py               Document helpers (no ORM)
-│   ├── requirements.txt
-│   ├── .env.example
-│   ├── routes/
-│   │   ├── auth.py
-│   │   ├── student.py
-│   │   ├── admin.py
-│   │   ├── tasks.py
-│   │   └── performance.py
-│   ├── services/
-│   │   ├── ai_generator.py     Groq AI integration
-│   │   ├── skill_engine.py     Decay rules + XP
-│   │   └── task_engine.py      Daily assignment logic
-│   └── utils/
-│       └── seed.py             Auto-seeds on first run
-│
-└── frontend/                   React + Vite + Tailwind
-    └── src/
-        ├── pages/              All page components
-        ├── components/         Shared + Student + Admin
-        ├── store/authStore.js  Zustand auth
-        └── utils/api.js        Axios instance
-```
-
----
-
-## 🐛 Troubleshooting
-
-**MongoDB connection refused**
-→ Make sure `mongod` is running: `mongod --dbpath /data/db`
-
-**GROQ_API_KEY error**
-→ Check `backend/.env` has `GROQ_API_KEY=gsk_...`
-
-**CORS error in browser**
-→ Flask must be on port 5000, Vite on 5173
-
-**"No tasks today"**
-→ Admin must approve tasks first (go to Admin → Tasks → Pending)
-
-**"Profile not found" after login**
-→ Complete the profile setup at /setup
-
----
-
-## 📄 License
-MIT — Free for educational use.
+MIT License – Free for educational purposes.
