@@ -134,20 +134,6 @@ skilltrack
 
 ---
 
-## 🤖 AI Task Generation (Groq)
-
-1. Get free API key: [console.groq.com](https://console.groq.com)
-2. Add to `backend/.env`: `GROQ_API_KEY=gsk_xxxx`
-3. Go to **Admin → AI Generate**
-4. Select course + day number → Generate
-5. Review in **Admin → Tasks → Pending** → Approve/Reject
-
-**Model**: `llama3-70b-8192` (free tier)
-**Task types generated**: MCQ, Debug, Coding, Theory
-**Difficulty**: Auto-scales with day number
-
----
-
 ## 🧠 Skill Decay Rules
 
 | Rule | Trigger | Points Lost |
